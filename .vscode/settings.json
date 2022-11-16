@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "blake2s.h": "c",
+        "sodium.h": "c"
+    }
+}

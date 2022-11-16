@@ -3,7 +3,10 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/lib/blake2",
+                "${workspaceFolder}/lib/libsodium",
+                "${workspaceFolder}/lib/libsodium/include",
             ],
             "defines": [],
             "macFrameworkPath": [
