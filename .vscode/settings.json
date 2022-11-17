@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "blake2s.h": "c",
-        "sodium.h": "c"
+        "sodium.h": "c",
+        "string.h": "c",
+        "arduinotypes.h": "c"
     }
 }

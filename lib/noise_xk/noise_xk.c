@@ -1,5 +1,4 @@
-#include "NoiseXK.h"
-#include "ArduinoTypes.h"
+#include "noise_xk.h"
 #include <blake2s.h>
 #include <sodium.h>
 
