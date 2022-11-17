@@ -5,7 +5,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 set(LIB_DIR ${CMAKE_SOURCE_DIR}/lib)
 set(LIB_DIR_BLAKE2 ${LIB_DIR}/blake2)
-set(LIB_DIR_LIBSODIUM ${LIB_DIR}/libsodium)
+set(LIB_DIR_LIBSODIUM /opt/homebrew/Cellar/libsodium/1.0.18_1)
 set(LIB_DIR_NOISE_XK ${LIB_DIR}/noise_xk)
 
 include_directories(
