@@ -1,6 +1,7 @@
 #include "noise_xk.h"
 #include <blake2s.h>
 #include <sodium.h>
+#include <string.h>
 
 /* ---------------------------------------------------------------- *
  * CONSTANTS                                                        *
@@ -42,9 +43,11 @@ uint8_t emptyKey[32] = {
 
 uint64_t minNonce = 0;
 BLAKE2s_context_t blakeContext;
+random_function_t* randomFunction = NULL;
 
 void noise_xk_init(random_function_t *random_function)
 {
+	randomFunction = random_function;
 	BLAKE2s_reset(&blakeContext);
 }
 
@@ -55,7 +58,7 @@ uint64_t incrementNounce(uint64_t n)
 
 void noise_xk_generateKeypair(keypair_t *keypair)
 {
-	esp_fill_random(keypair->private_key, 32);
+	randomFunction(keypair->private_key, 32);
 	crypto_scalarmult_curve25519_base(keypair->public_key, keypair->private_key);
 }
 
@@ -69,7 +72,7 @@ void noise_xk_dh(const uint8_t *privateKey, const uint8_t *publicKey, uint8_t *s
  * ---------------------------------------------------------------- */
 
 void initializeKey(cipherstate_t* cipherState, uint8_t* key) {
-	cipherState->n = minNonce;
+	cipherState->n = minNonce;	
 	memcpy(cipherState->k, key, CIPHER_KEY_SIZE);
 }
 
@@ -95,8 +98,10 @@ void initializeSymmetric(symmetricstate_t *symmetricState)
 	initializeKey(&symmetricState->cs, emptyKey);
 }
 
-void initalizeInitiator(handshakestate_t *handshakeState, uint8_t *prologue, size_t prologueSize, keypair_t *s, uint8_t *rs)
+void initalizeInitiator(noisesession_t *noiseSession, uint8_t *prologue, size_t prologueSize, keypair_t *s, uint8_t *rs)
 {
+	handshakestate_t* handshakeState = &noiseSession->hs;
+
 	initializeSymmetric(&handshakeState->ss);
 	// mixHash(handshakeState->ss, prologue, prologueSize);
 	// mixHash(handshakeState->ss, rs);
@@ -108,7 +113,7 @@ void noise_xk_initSession(noisesession_t *session, bool initiator, uint8_t *prol
 {
 	if (initiator)
 	{
-		initalizeInitiator(&session->hs, prologue, prologueSize, s, rs);
+		initalizeInitiator(session, prologue, prologueSize, s, rs);
 	}
 	else
 	{

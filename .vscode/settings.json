@@ -4,5 +4,6 @@
         "sodium.h": "c",
         "string.h": "c",
         "arduinotypes.h": "c"
-    }
+    },
+    "editor.formatOnSave": true
 }

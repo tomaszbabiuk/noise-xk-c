@@ -1,18 +1,13 @@
 /*
-  NoiseXK.cpp - The implementation of Noise XK protocol
+  NoiseXK - The implementation of Noise XK protocol
 */
 
-#ifndef NoiseXK_h
-#define NoiseXK_h
+#ifndef noise_xk_h
+#define noise_xk_h
 
 #include <inttypes.h>
 #include <stddef.h>
 #include <stdbool.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 
 /* ---------------------------------------------------------------- *
  * TYPES                                                            *
@@ -85,9 +80,5 @@ uint64_t noise_xk_incrementNounce(uint64_t n);
 void noise_xk_generateKeypair(keypair_t *keypair);
 void noise_xk_dh(const uint8_t *privateKey, const uint8_t *publicKey, uint8_t *sharedSecret);
 void noise_xk_initSession(noisesession_t *session, bool initiator, uint8_t *prologue, size_t prologueSize, keypair_t *s, uint8_t *rs);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
