@@ -6,13 +6,13 @@
             "name": "Debug (noise_xk)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/noise_xk",
+            "program": "${workspaceFolder}/build/noise_xk_tester",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-                "MIMode": "lldb"
+            "MIMode": "lldb"
         }
     ]
 }

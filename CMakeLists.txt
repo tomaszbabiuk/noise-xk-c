@@ -7,6 +7,7 @@ set(LIB_DIR ${CMAKE_SOURCE_DIR}/lib)
 set(LIB_DIR_BLAKE2 ${LIB_DIR}/blake2)
 set(LIB_DIR_LIBSODIUM /opt/homebrew/Cellar/libsodium/1.0.18_1)
 set(LIB_DIR_NOISE_XK ${LIB_DIR}/noise_xk)
+set(TARGET_TESTER_DIR ${CMAKE_SOURCE_DIR}/src)
 
 include_directories(
     ${LIB_DIR_LIBSODIUM}/include
@@ -28,5 +29,5 @@ add_library(blake
     ${LIB_DIR_BLAKE2}/blake2s.c
 )
 
-add_executable(noise_xk main.c)
-target_link_libraries(noise_xk ${LIB_DIR_LIBSODIUM}/lib/libsodium.a blake)
+add_executable(noise_xk_tester ${TARGET_TESTER_DIR}/main.c)
+target_link_libraries(noise_xk_tester ${LIB_DIR_LIBSODIUM}/lib/libsodium.a blake)
