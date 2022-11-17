@@ -67,7 +67,7 @@ typedef void random_function_t(void *, size_t);
 void noise_xk_init(random_function_t *random_function);
 uint64_t noise_xk_incrementNounce(uint64_t n);
 void noise_xk_generateKeypair(keypair_t *keypair);
-void noise_xk_dh(const uint8_t *privateKey, const uint8_t *publicKey, uint8_t *sharedSecret);
+bool noise_xk_dh(const uint8_t *privateKey, const uint8_t *publicKey, uint8_t *sharedSecret);
 void noise_xk_initSession(noisesession_t *session, bool initiator, uint8_t *prologue, size_t prologueSize, keypair_t *s, uint8_t *rs);
 
 #endif
