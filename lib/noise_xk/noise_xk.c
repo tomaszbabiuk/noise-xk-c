@@ -17,6 +17,7 @@ const uint8_t NOISE_XK_FULL_PROTOCOL_NAME[] = {
 
 const size_t NOISE_XK_FULL_PROTOCOL_NAME_LEN = 33;
 const size_t HASH_SIZE = 32;
+const size_t KEY_SIZE = 32;
 const size_t CIPHER_KEY_SIZE = 32;
 
 uint64_t minNonce = 0;
@@ -65,6 +66,25 @@ void noise_xk_mixHash(symmetricstate_t *symmetricState, uint8_t *data,
                    dataLen);
 }
 
+// func getHkdf(ck [32]byte, ikm []byte) ([32]byte, [32]byte, [32]byte) {
+// 	var k1 [32]byte
+// 	var k2 [32]byte
+// 	var k3 [32]byte
+// 	output := hkdf.New(blake2HkdfInterface, ikm[:], ck[:], []byte{})
+// 	io.ReadFull(output, k1[:])
+// 	io.ReadFull(output, k2[:])
+// 	io.ReadFull(output, k3[:])
+// 	return k1, k2, k3
+// }
+
+void noise_xk_getHKDF() {
+  // TODO
+}
+
+void noise_xk_mixKey(symmetricstate_t *symmetricState, uint8_t *ikm32) {
+  // TODO
+}
+
 void noise_xk_hashProtocolName(uint8_t *out) {
   noise_xk_getHash(out, (uint8_t *)&NOISE_XK_FULL_PROTOCOL_NAME,
                    NOISE_XK_FULL_PROTOCOL_NAME_LEN, NULL, 0);
@@ -109,4 +129,52 @@ void noise_xk_initSession(noisesession_t *session, bool initiator,
 
   session->i = initiator;
   session->mc = 0;
+}
+
+int noise_xk_sendMessageA(handshakestate_t *handshakeState, uint8_t *payload,
+                          size_t payloadLen, uint8_t *outBuffer,
+                          size_t *outBufferLen) {
+  keypair_t e;
+  noise_xk_generateKeypair(&e);
+  keypair_t *handshakeE = &handshakeState->e;
+  memcpy(handshakeE->public_key, e.public_key, KEY_SIZE);
+
+  uint8_t *ne = (uint8_t *)&e.public_key;
+  noise_xk_mixHash(&handshakeState->ss, ne, KEY_SIZE);
+
+  uint8_t sharedSecret[32];
+  noise_xk_dh(handshakeE->private_key, handshakeState->rs, sharedSecret);
+
+  noise_xk_mixKey(&handshakeState->ss, sharedSecret);
+  return 0;
+}
+
+int noise_xk_sendMessage(noisesession_t *noiseSession, uint8_t *payload,
+                         size_t payloadLen, uint8_t *outBuffer,
+                         size_t *outBufferLen) {
+  if (noiseSession->mc == 0) {
+    return noise_xk_sendMessageA(&noiseSession->hs, payload, payloadLen,
+                                 outBuffer, outBufferLen);
+  }
+
+  if (noiseSession->mc == 1) {
+    // TODO
+    //  return noise_xk_writeMessageB(noiseSession, message, messageLen,
+    //  outBuffer,
+    //                                outBufferLen);
+  }
+
+  if (noiseSession->mc == 2) {
+    // TODO
+    // return noise_xk_writeMessageC(noiseSession, message, messageLen,
+    // outBuffer,
+    //                               outBufferLen);
+  }
+
+  if (noiseSession->mc > 2) {
+    // TODO
+  }
+
+  noiseSession->mc++;
+  return 0;
 }

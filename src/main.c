@@ -47,4 +47,10 @@ int main() {
 
   noise_xk_initSession(&initiatorSession, true, NULL, 0, &initiatorKeypair,
                        responderKeypair.public_key);
+
+  uint8_t messageA[1] = {0x65};
+  uint8_t outBuffer[100];
+  size_t outBufferLen;
+  noise_xk_sendMessage(&initiatorSession, messageA, sizeof(messageA),
+                       &outBuffer, outBufferLen);
 }

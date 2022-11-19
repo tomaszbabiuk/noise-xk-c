@@ -6,41 +6,36 @@
 #define noise_xk_h
 
 #include <inttypes.h>
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 /* ---------------------------------------------------------------- *
  * TYPES                                                            *
  * ---------------------------------------------------------------- */
 
-typedef struct
-{
+typedef struct {
   uint8_t public_key[32];
   uint8_t private_key[32];
 } keypair_t;
 
-typedef struct
-{
+typedef struct {
   uint8_t ne[32];
   uint8_t ns[1024]; // todo check this size
   uint8_t ciphertext[1024];
 } messagebuffer_t;
 
-typedef struct
-{
+typedef struct {
   uint8_t k[32];
   uint64_t n;
 } cipherstate_t;
 
-typedef struct
-{
+typedef struct {
   cipherstate_t cs;
   uint8_t ck[32];
   uint8_t h[32];
 } symmetricstate_t;
 
-typedef struct
-{
+typedef struct {
   symmetricstate_t ss;
   keypair_t s;
   keypair_t e;
@@ -48,8 +43,7 @@ typedef struct
   uint8_t re[32];
 } handshakestate_t;
 
-typedef struct
-{
+typedef struct {
   handshakestate_t hs;
   uint8_t h[32];
   cipherstate_t cs1;
@@ -67,7 +61,13 @@ typedef void random_function_t(void *, size_t);
 void noise_xk_init(random_function_t *random_function);
 uint64_t noise_xk_incrementNounce(uint64_t n);
 void noise_xk_generateKeypair(keypair_t *keypair);
-bool noise_xk_dh(const uint8_t *privateKey, const uint8_t *publicKey, uint8_t *sharedSecret);
-void noise_xk_initSession(noisesession_t *session, bool initiator, uint8_t *prologue, size_t prologueSize, keypair_t *s, uint8_t *rs);
+bool noise_xk_dh(const uint8_t *privateKey, const uint8_t *publicKey,
+                 uint8_t *sharedSecret);
+void noise_xk_initSession(noisesession_t *session, bool initiator,
+                          uint8_t *prologue, size_t prologueSize, keypair_t *s,
+                          uint8_t *rs);
+int noise_xk_sendMessage(noisesession_t *noiseSession, uint8_t *message,
+                         size_t messageLen, uint8_t *outBuffer,
+                         size_t *outBufferLen);
 
 #endif
