@@ -3,7 +3,12 @@
         "blake2s.h": "c",
         "sodium.h": "c",
         "string.h": "c",
-        "arduinotypes.h": "c"
+        "arduinotypes.h": "c",
+        "locale": "c",
+        "string": "c",
+        "stdio.h": "c",
+        "system_error": "c",
+        "hmac_blake2s.h": "c"
     },
     "editor.formatOnSave": true,
     "editor.tabSize": 2,

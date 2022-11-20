@@ -20,31 +20,37 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef BLAKE2b_H
-#define BLAKE2b_H
+/*
+    Cut-down BLAKE2b implementation, starting with the version from arduinolibs:
 
-#include <stdint.h>
-#include <stddef.h>
+    https://github.com/rweather/arduinolibs
+*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "hmac_blake2s.h"
+#include "blake2s.h"
+#include <string.h>
 
-typedef struct
-{
-    uint64_t h[8];
-    uint8_t  m[128];
-    uint64_t length;    /* Limited to 2^64 - 1 bytes */
-    uint8_t  posn;
+void BLAKE2b_hmac(const uint8_t *secret, size_t secretLen, const uint8_t *salt,
+                  size_t saltLen, uint8_t *prk) {
+  BLAKE2s_context_t hashContext;
+  uint8_t k_ipad[64] = {0};
+  uint8_t k_opad[64] = {0};
+  uint8_t digest[32] = {0};
+  memset(&k_ipad, 0x36, 64);
+  memset(&k_opad, 0x5c, 64);
 
-} BLAKE2b_context_t;
+  for (size_t i = 0; i < saltLen; i++) {
+    k_ipad[i] = salt[i] ^ 0x36;
+    k_opad[i] = salt[i] ^ 0x5c;
+  }
 
-void BLAKE2b_reset(BLAKE2b_context_t *context);
-void BLAKE2b_update(BLAKE2b_context_t *context, const void *data, size_t size);
-void BLAKE2b_finish(BLAKE2b_context_t *context, uint8_t *hash);
+  BLAKE2s_reset(&hashContext);
+  BLAKE2s_update(&hashContext, k_ipad, 64);
+  BLAKE2s_update(&hashContext, secret, secretLen);
+  BLAKE2s_finish(&hashContext, digest);
 
-#ifdef __cplusplus
-};
-#endif
-
-#endif
+  BLAKE2s_reset(&hashContext);
+  BLAKE2s_update(&hashContext, k_opad, 64);
+  BLAKE2s_update(&hashContext, digest, 32);
+  BLAKE2s_finish(&hashContext, prk);
+}

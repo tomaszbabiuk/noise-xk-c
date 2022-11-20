@@ -51,6 +51,6 @@ int main() {
   uint8_t messageA[1] = {0x65};
   uint8_t outBuffer[100];
   size_t outBufferLen;
-  noise_xk_sendMessage(&initiatorSession, messageA, sizeof(messageA),
-                       &outBuffer, outBufferLen);
+  // noise_xk_sendMessage(&initiatorSession, messageA, sizeof(messageA),
+  //                      &outBuffer, outBufferLen);
 }

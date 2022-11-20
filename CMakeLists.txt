@@ -12,15 +12,16 @@ set(TARGET_TESTER_DIR ${CMAKE_SOURCE_DIR}/src)
 include_directories(
     ${LIB_LIBSODIUM_DIR}/include
     ${LIB_BLAKE2_DIR}
+    ${LIB_HMAC_BLAKE2_DIR}
     ${LIB_NOISE_XK_DIR}
     )
 
-add_library(blake_lib
+add_library(blake2_lib
     ${LIB_BLAKE2_DIR}/blake2-endian.h
-    ${LIB_BLAKE2_DIR}/blake2b.h
     ${LIB_BLAKE2_DIR}/blake2s.h
-    ${LIB_BLAKE2_DIR}/blake2b.c
     ${LIB_BLAKE2_DIR}/blake2s.c   
+    ${LIB_BLAKE2_DIR}/hmac_blake2s.h
+    ${LIB_BLAKE2_DIR}/hmac_blake2s.c
 )
 
 add_library(noise_xk_lib
@@ -28,6 +29,9 @@ add_library(noise_xk_lib
     ${LIB_NOISE_XK_DIR}/noise_xk.c
 )
 
-
 add_executable(noise_xk_tester ${TARGET_TESTER_DIR}/main.c)
-target_link_libraries(noise_xk_tester ${LIB_LIBSODIUM_DIR}/lib/libsodium.a blake_lib noise_xk_lib)
+target_link_libraries(noise_xk_tester ${LIB_LIBSODIUM_DIR}/lib/libsodium.a blake2_lib noise_xk_lib)
+
+
+add_executable(hmac_blake2_tester ${TARGET_TESTER_DIR}/main2.c)
+target_link_libraries(hmac_blake2_tester blake2_lib)

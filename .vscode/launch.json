@@ -1,12 +1,23 @@
 {
     "version": "0.2.0",
     "configurations": [
-    
         {
             "name": "Debug (noise_xk)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/noise_xk_tester",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb"
+        },
+        {
+            "name": "Debug (hmac_blake2)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/hmac_blake2_tester",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
