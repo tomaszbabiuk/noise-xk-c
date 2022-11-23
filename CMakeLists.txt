@@ -33,5 +33,7 @@ add_executable(noise_xk_tester ${TARGET_TESTER_DIR}/main.c)
 target_link_libraries(noise_xk_tester ${LIB_LIBSODIUM_DIR}/lib/libsodium.a blake2_lib noise_xk_lib)
 
 
-add_executable(hmac_blake2_tester ${TARGET_TESTER_DIR}/main2.c)
-target_link_libraries(hmac_blake2_tester blake2_lib)
+enable_testing()
+add_executable(tester_hmac ${TARGET_TESTER_DIR}/tester_hmac.c)
+target_link_libraries(tester_hmac blake2_lib)
+add_test(Tester tester)

@@ -33,15 +33,26 @@
 void BLAKE2b_hmac(const uint8_t *secret, size_t secretLen, const uint8_t *salt,
                   size_t saltLen, uint8_t *prk) {
   BLAKE2s_context_t hashContext;
+  uint8_t hashedSalt[64] = {0};
+
   uint8_t k_ipad[64] = {0};
   uint8_t k_opad[64] = {0};
   uint8_t digest[32] = {0};
   memset(&k_ipad, 0x36, 64);
   memset(&k_opad, 0x5c, 64);
 
+  uint8_t *saltToTake = salt;
+
+  if (saltLen > 64) {
+    BLAKE2s_reset(&hashContext);
+    BLAKE2s_update(&hashContext, salt, saltLen);
+    BLAKE2s_finish(&hashContext, hashedSalt);
+    saltToTake = hashedSalt;
+  }
+
   for (size_t i = 0; i < saltLen; i++) {
-    k_ipad[i] = salt[i] ^ 0x36;
-    k_opad[i] = salt[i] ^ 0x5c;
+    k_ipad[i] = saltToTake[i] ^ 0x36;
+    k_opad[i] = saltToTake[i] ^ 0x5c;
   }
 
   BLAKE2s_reset(&hashContext);
