@@ -53,6 +53,7 @@ add_executable(
 target_link_libraries(
   blake2_test
   GTest::gtest_main
+  GTest::gmock_main
   blake2_lib
 )
 
