@@ -30,7 +30,7 @@
 #include "blake2s.h"
 #include <string.h>
 
-void BLAKE2b_hmac(const uint8_t *secret, size_t secretLen, const uint8_t *salt,
+void BLAKE2s_hmac(const void *secret, size_t secretLen, const void *salt,
                   size_t saltLen, uint8_t *prk) {
   BLAKE2s_context_t hashContext;
   uint8_t hashedSalt[64] = {0};
@@ -41,7 +41,7 @@ void BLAKE2b_hmac(const uint8_t *secret, size_t secretLen, const uint8_t *salt,
   memset(&k_ipad, 0x36, 64);
   memset(&k_opad, 0x5c, 64);
 
-  uint8_t *saltToTake = salt;
+  uint8_t *saltToTake = (uint8_t *)salt;
 
   if (saltLen > 64) {
     BLAKE2s_reset(&hashContext);
