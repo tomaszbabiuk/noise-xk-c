@@ -50,7 +50,7 @@ void BLAKE2s_hmac(const void *secret, size_t secretLen, const void *salt,
     saltToTake = hashedSalt;
   }
 
-  for (size_t i = 0; i < saltLen; i++) {
+  for (size_t i = 0; i < 32; i++) {
     k_ipad[i] = saltToTake[i] ^ 0x36;
     k_opad[i] = saltToTake[i] ^ 0x5c;
   }
