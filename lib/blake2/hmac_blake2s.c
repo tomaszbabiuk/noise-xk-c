@@ -1,67 +1,48 @@
 /*
- * Copyright (C) 2016 Southern Storm Software, Pty Ltd.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
- * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
+ * Author: Tomasz Babiuk, License: public domain
  */
-
-/*
-    Cut-down BLAKE2b implementation, starting with the version from arduinolibs:
-
-    https://github.com/rweather/arduinolibs
-*/
 
 #include "hmac_blake2s.h"
 #include "blake2s.h"
 #include <string.h>
 
+#define BLOCKSIZE 64
+#define HASHSIZE 32
+#define IPAD_PATTERN 0x36
+#define OPAD_PATTERN 0x5C
+
 void BLAKE2s_hmac(const void *secret, size_t secretLen, const void *salt,
-                  size_t saltLen, uint8_t *prk) {
+                  size_t saltLen, uint8_t *out) {
   BLAKE2s_context_t hashContext;
   uint8_t hashedSalt[64] = {0};
 
-  uint8_t k_ipad[64] = {0};
-  uint8_t k_opad[64] = {0};
-  uint8_t digest[32] = {0};
-  memset(&k_ipad, 0x36, 64);
-  memset(&k_opad, 0x5c, 64);
+  uint8_t ipad[BLOCKSIZE] = {0};
+  uint8_t opad[BLOCKSIZE] = {0};
+  uint8_t digest[HASHSIZE] = {0};
+  memset(&ipad, IPAD_PATTERN, BLOCKSIZE);
+  memset(&opad, OPAD_PATTERN, BLOCKSIZE);
 
   uint8_t *saltToTake = (uint8_t *)salt;
 
-  if (saltLen > 64) {
+  if (saltLen > BLOCKSIZE) {
     BLAKE2s_reset(&hashContext);
     BLAKE2s_update(&hashContext, salt, saltLen);
     BLAKE2s_finish(&hashContext, hashedSalt);
     saltToTake = hashedSalt;
   }
 
-  for (size_t i = 0; i < 32; i++) {
-    k_ipad[i] = saltToTake[i] ^ 0x36;
-    k_opad[i] = saltToTake[i] ^ 0x5c;
+  for (size_t i = 0; i < HASHSIZE; i++) {
+    ipad[i] = saltToTake[i] ^ IPAD_PATTERN;
+    opad[i] = saltToTake[i] ^ OPAD_PATTERN;
   }
 
   BLAKE2s_reset(&hashContext);
-  BLAKE2s_update(&hashContext, k_ipad, 64);
+  BLAKE2s_update(&hashContext, ipad, BLOCKSIZE);
   BLAKE2s_update(&hashContext, secret, secretLen);
   BLAKE2s_finish(&hashContext, digest);
 
   BLAKE2s_reset(&hashContext);
-  BLAKE2s_update(&hashContext, k_opad, 64);
-  BLAKE2s_update(&hashContext, digest, 32);
-  BLAKE2s_finish(&hashContext, prk);
+  BLAKE2s_update(&hashContext, opad, BLOCKSIZE);
+  BLAKE2s_update(&hashContext, digest, HASHSIZE);
+  BLAKE2s_finish(&hashContext, out);
 }
