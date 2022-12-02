@@ -1,3 +1,4 @@
+#include "hkdf_blake2s.h"
 #include "hmac_blake2s.h"
 #include "gmock/gmock.h"
 #include <gtest/gtest.h>
@@ -6,13 +7,12 @@
 
 using ::testing::ElementsAre;
 
-uint8_t secret[32] = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-                      2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
-
 TEST(HMAC_blake_test, SaltLowerOrEqual32Characters) {
   uint8_t prk[32] = {0};
   uint8_t salt[32] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+  uint8_t secret[32] = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
   BLAKE2s_hmac(&secret, 32, &salt, 32, (uint8_t *)&prk);
 
   ASSERT_THAT(prk, ElementsAre(132, 8, 2, 160, 85, 73, 181, 155, 61, 238, 5,
@@ -29,6 +29,8 @@ TEST(HMAC_blake_test, SaltGreaterThan64Characters) {
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+  uint8_t secret[32] = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
 
   BLAKE2s_hmac(&secret, 32, &salt, 96, (uint8_t *)&prk);
 
@@ -40,8 +42,13 @@ TEST(HMAC_blake_test, SaltGreaterThan64Characters) {
   uint8_t x;
 }
 
-//[]uint8 len: 32, cap: 32,
-//[229,192,76,14,222,116,21,207,230,198,110,243,173,130,135,157,245,134,125,21,179,174,103,184,85,127,177,151,125,1,234,16]
+TEST(HKDF_blake_test, BasicHkdf) {
+  uint8_t secret[32] = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+                        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
+  uint8_t salt[32] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+  BLAKE2s_hkdf(&secret, 32, &salt, 32);
+}
 
 int main(int argc, char *argv[]) {
   ::testing::InitGoogleTest(&argc, argv);

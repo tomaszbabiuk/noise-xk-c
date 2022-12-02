@@ -34,6 +34,8 @@ add_library(blake2_lib
     ${LIB_BLAKE2_DIR}/blake2s.c   
     ${LIB_BLAKE2_DIR}/hmac_blake2s.h
     ${LIB_BLAKE2_DIR}/hmac_blake2s.c
+    ${LIB_BLAKE2_DIR}/hkdf_blake2s.h
+    ${LIB_BLAKE2_DIR}/hkdf_blake2s.c
 )
 
 add_library(noise_xk_lib
