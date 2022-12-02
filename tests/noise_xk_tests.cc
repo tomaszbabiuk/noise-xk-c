@@ -1,6 +1,8 @@
 #include "blake2s.h"
 #include "noise_xk.h"
 #include "sodium.h"
+#include "gmock/gmock.h"
+#include <gtest/gtest.h>
 #include <stdio.h>
 
 keypair_t initiatorKeypair = {
@@ -31,26 +33,31 @@ void generate_test_random_vector(void *target, size_t size) {
   }
 }
 
-int main() {
-  printf("Hello Noise XK");
+TEST(Noise_XK_test, SharedKeysAreEqual) {
+  // printf("Hello Noise XK");
 
   noise_xk_init(generate_test_random_vector);
 
-  printf("Generating keypairs");
-  noise_xk_generateKeypair(&initiatorKeypair);
-  noise_xk_generateKeypair(&responderKeypair);
+  // printf("Generating keypairs");
+  // noise_xk_generateKeypair(&initiatorKeypair);
+  // noise_xk_generateKeypair(&responderKeypair);
 
   // noise_xk_dh(initiatorKeypair.private_key,
   // responderKeypair.public_key, initiator_secret);
   // noise_xk_dh(responderKeypair.private_key,
   // initiatorKeypair.public_key, responder_secret);
 
-  noise_xk_initSession(&initiatorSession, true, NULL, 0, &initiatorKeypair,
-                       responderKeypair.public_key);
+  // noise_xk_initSession(&initiatorSession, true, NULL, 0, &initiatorKeypair,
+  //                      responderKeypair.public_key);
 
-  uint8_t messageA[1] = {0x65};
-  uint8_t outBuffer[100];
-  size_t outBufferLen;
+  // uint8_t messageA[1] = {0x65};
+  // uint8_t outBuffer[100];
+  // size_t outBufferLen;
   // noise_xk_sendMessage(&initiatorSession, messageA, sizeof(messageA),
   //                      &outBuffer, outBufferLen);
+}
+
+int main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }

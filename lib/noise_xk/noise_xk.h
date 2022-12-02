@@ -9,10 +9,13 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* ---------------------------------------------------------------- *
  * TYPES                                                            *
  * ---------------------------------------------------------------- */
-
 typedef struct {
   uint8_t public_key[32];
   uint8_t private_key[32];
@@ -69,5 +72,9 @@ void noise_xk_initSession(noisesession_t *session, bool initiator,
 int noise_xk_sendMessage(noisesession_t *noiseSession, uint8_t *message,
                          size_t messageLen, uint8_t *outBuffer,
                          size_t *outBufferLen);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif

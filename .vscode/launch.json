@@ -1,23 +1,35 @@
 {
     "version": "0.2.0",
     "configurations": [
-        // {
-        //     "name": "Debug (noise_xk)",
-        //     "type": "cppdbg",
-        //     "request": "launch",
-        //     "program": "${workspaceFolder}/build/noise_xk_tester",
-        //     "args": [],
-        //     "stopAtEntry": false,
-        //     "cwd": "${workspaceFolder}",
-        //     "environment": [],
-        //     "externalConsole": false,
-        //     "MIMode": "lldb"
-        // },
         {
-            "name": "Run Unit tests",
+            "name": "HMAC debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/blake2_test",
+            "program": "${workspaceFolder}/build/hmac_blake2_tests",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb"
+        },
+        {
+            "name": "HKDF debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/hkdf_blake2_tests",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb"
+        },
+        {
+            "name": "NOISE-XK debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/noise_xk_tests",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build",

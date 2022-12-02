@@ -43,21 +43,61 @@ add_library(noise_xk_lib
     ${LIB_NOISE_XK_DIR}/noise_xk.c
 )
 
-add_executable(noise_xk_tester ${TESTS_DIR}/main.c)
-target_link_libraries(noise_xk_tester ${LIB_LIBSODIUM_DIR}/lib/libsodium.a blake2_lib noise_xk_lib)
+# add_executable(noise_xk_tester ${TESTS_DIR}/main.c)
+# target_link_libraries(noise_xk_tester ${LIB_LIBSODIUM_DIR}/lib/libsodium.a blake2_lib noise_xk_lib)
 
 enable_testing()
 
 add_executable(
-  blake2_test
-  ${TESTS_DIR}/blake2_hmac_test.cc
+  hmac_blake2_tests
+  ${TESTS_DIR}/hmac_blake2_tests.cc
 )
 
 target_link_libraries(
-  blake2_test
+  hmac_blake2_tests
   GTest::gtest_main
   GTest::gmock_main
   blake2_lib
 )
 
-gtest_discover_tests(blake2_test)
+
+
+add_executable(
+  hkdf_blake2_tests
+  ${TESTS_DIR}/hkdf_blake2_tests.cc
+)
+
+target_link_libraries(
+  hkdf_blake2_tests
+  GTest::gtest_main
+  GTest::gmock_main
+  blake2_lib
+)
+
+
+
+add_executable(
+  noise_xk_tests
+  ${TESTS_DIR}/noise_xk_tests.cc
+)
+
+target_link_libraries(
+  noise_xk_tests
+  GTest::gtest_main
+  GTest::gmock_main
+  noise_xk_lib
+  ${LIB_LIBSODIUM_DIR}/lib/libsodium.a
+  blake2_lib
+)
+
+
+# add_executable(
+#   noisexk_blake2_test
+#   ${TESTS_DIR}/hkdf_blake2_test.cc
+#   ${TESTS_DIR}/hmac_blake2_test.cc
+# )
+
+
+
+# gtest_discover_tests(hmac_blake2_tests)
+# gtest_discover_tests(hkdf_blake2_tests)
