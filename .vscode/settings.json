@@ -1,4 +1,5 @@
 {
+    "C_Cpp.intelliSenseEngine": "default",
     "files.associations": {
         "blake2s.h": "c",
         "sodium.h": "c",

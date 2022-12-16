@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 cmake_policy(SET CMP0048 NEW)
+cmake_policy(SET CMP0135 NEW)
 project(noise-xk LANGUAGES C CXX)
 
 set(CMAKE_BUILD_TYPE Debug)

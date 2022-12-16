@@ -11,8 +11,8 @@
 
 void BLAKE2s_hkdf(const void *secret, size_t secretLen, const void *salt,
                   size_t saltLen) {
-  // uint8_t prk[32];
-  // BLAKE2s_hmac(secret, secretLen, salt, saltLen, prk);
+  uint8_t prk[32];
+  BLAKE2s_hmac(secret, secretLen, salt, saltLen, prk);
 
   // uint8_t blockN[32];
   // memset(&blockN, 0, 32);
